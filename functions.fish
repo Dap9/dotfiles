@@ -2,6 +2,7 @@
 
 set installed_base ".installed/"
 set info ".info"
+set install_script ".install.fish"
 
 function install_if_dne -d "Install if does not exist" -a dir
   # Get details of dotfiles info
@@ -31,7 +32,7 @@ function install -d "Install program" -a program dir
     return 1
   end
 
-  source $dir/_install.fish
+  source $dir/$install_script
 
   if test $status -ne 0
     print_failure "Unable to source $dir/_install.sh"
