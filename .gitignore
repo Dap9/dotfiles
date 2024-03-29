@@ -1,1 +1,3 @@
 .installed/
+tmux/plugins/*
+!tmux/plugins/tpm
