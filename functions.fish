@@ -3,6 +3,7 @@
 set installed_base ".installed/"
 set info ".info"
 set install_script ".install.fish"
+set dep_file ".deps"
 
 function install_if_dne -d "Install if does not exist" -a dir
   # Get details of dotfiles info
@@ -32,10 +33,21 @@ function install -d "Install program" -a program dir
     return 1
   end
 
+  # Check dependencies
+  if test -e "$dir/$dep_file"
+    set -l deps (string split "\n" < "$dir/$dep_file")
+    for dep in $deps
+      install_if_dne $dep $dep
+      if test $status -ne 0
+        return $status
+      end
+    end
+  end
+
   source $dir/$install_script
 
   if test $status -ne 0
-    print_failure "Unable to source $dir/_install.sh"
+    print_failure "Unable to source $dir/$install_script"
     return $status
   end
 
@@ -71,3 +83,10 @@ function get_field --argument-names dict key
     eval echo \$$dict'__'$key
 end
 
+function clone_branch -d "Git clone a specific branch" -a repo dest branch
+  git clone "$repo" "$dest" --branch "$branch"
+  if test $status -ne 0
+    print_failure "Could not clone $repo at branch: $branch to destination $dest"
+  end
+  return $status
+end

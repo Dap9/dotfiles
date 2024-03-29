@@ -1,3 +1,7 @@
 [submodule "nvim"]
 	path = nvim
-	url = https://github.com/Dap9/nvim.git
+	url = git@github.com:Dap9/nvim.git
+
+[submodule "tmux"]
+	path = tmux
+	url = git@github.com:Dap9/tmux.git
