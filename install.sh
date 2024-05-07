@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+export INSTALLED_BASE=".installed/"
+export INFO=".info"
+export INSTALL_SCRIPT=".install.fish"
+export DEP_FILE=".deps"
+
 # Structure:
 # dotfiles/
 #       -- install.sh
@@ -9,6 +14,8 @@
 #       -- dir/
 #           -- info -> Contains the command wich is expected to be run to test for existence
 #           -- _install.fish
+#       -- .installed/ -> effective cache for what has already been installed
+#           -- $name
 
 # Agument parsing from https://stackoverflow.com/a/29754866
 # -allow a command to fail with !’s side effect on errexit
@@ -21,8 +28,8 @@ fi
 
 # option --output/-o requires 1 argument
 # If we want multiple values to the same arg -> use it multiple times & append to a var
-LONGOPTS=debug,no-change-shell
-OPTIONS=dk
+LONGOPTS=debug,install-file:,no-change-shell
+OPTIONS=di:k
 
 # -regarding ! and PIPESTATUS see above
 # -temporarily store output to be able to check for errors
@@ -49,10 +56,10 @@ while true; do
             c=n
             shift
             ;;
-        # -v|--verbose)
-        #     v=y
-        #     shift
-        #     ;;
+        -i|--install-file)
+            export INSTALL_SCRIPT="$2"
+            shift
+            ;;
         # -o|--output)
         #     outFile="$2"
         #     shift 2
@@ -97,7 +104,8 @@ fi
 # git submodule update --init --recursive
  
 # Does fish shell exist? if no then install it
-if ! type fish &> /dev/null
+FISH_OK=$(dpkg-query -W -f='${Status}' "fish" 2>/dev/null | grep "install ok installed")
+if [ ! type fish &> /dev/null ] || [ ! "$FISH_OK" ];
 then
   echo "Fish shell does not exist. Installing it... [Requires sudo]"
   sudo apt-add-repository ppa:fish-shell/release-3
@@ -110,6 +118,8 @@ then
     sudo chsh -s $(which fish) $(whoami)
   fi
 fi
+
+touch "$INSTALLED_BASE/fish"
 
 cd $(dirname $0)
 

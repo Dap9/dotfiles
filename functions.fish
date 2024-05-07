@@ -1,16 +1,18 @@
 #!/bin/env fish
 
-set installed_base ".installed/"
-set info ".info"
-set install_script ".install.fish"
-set dep_file ".deps"
+set installed_base $INSTALLED_BASE
+set info $INFO 
+set install_script $INSTALL_SCRIPT
+set dep_file $DEP_FILE
 
 function install_if_dne -d "Install if does not exist" -a dir
   # Get details of dotfiles info
   read -L name < "$dir/$info"
 
   # Test if already installed
-  if test \( -e ".installed/$name" \) -o \( (type -q $name) $status -eq 0 \)
+  
+  if test \( -e ".installed/$name" \) -o \( (type -q $name) $status -eq 0 \) -o \
+    \( -n "$(dpkg-query -W -f='${Status}' "$name" 2>/dev/null | grep "install ok installed")" \);
     touch "$installed_base$name"
     if test -n "$_flag_d"
       print_warning "$name already installed"

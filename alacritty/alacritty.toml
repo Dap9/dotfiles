@@ -1,5 +1,8 @@
 [font]
-size = 9
+size = 9.75
+
+[font.normal]
+family = "ShureTechMono Nerd Font"
 
 [cursor]
 style = { shape = "Beam" }
@@ -7,3 +10,11 @@ style = { shape = "Beam" }
 [shell]
 program = "tmux"
 args = ["new", "-A"]
+
+[keyboard]
+bindings = [
+{ key = "F11", action = "ToggleFullscreen" },
+]
+
+[window]
+startup_mode = "Maximized"
