@@ -1,5 +1,14 @@
 #!/bin/env fish
 
+#TODO: MAJOR problem: Don't want to have deps as separate folders if they aren't something
+# that needs configuration
+# How to decide?
+#
+# Options:
+#  - have a function to install deps in _install.fish -> installs all deps
+#  issue: How to check if already installed? installed/.dep-name ?
+#  custom check for the dep? version prereqs? .dep-name + version no.
+
 argparse "h/help" "d/debug" -- $argv
 set -g _flag_d $_flag_d
 
@@ -22,18 +31,3 @@ end
 for dir in (find . -maxdepth 1 -type d -not -path "*/.*" -not -name ".")
   install_if_dne $dir
 end
-
-# if not type -q stow
-#   echo "Stow does exist. Installing it... [Requires sudo]"
-#   sudo apt update
-#   sudo apt install -y stow
-# end
-#
-# if not type -q tmux
-#   echo "TMUX does not exist. Installing it... [Requires sudo]"
-#   sudo apt install tmux
-# end
-#
-# if not type -q nvim
-#   echo "NVIM does not exist, installing it.."
-# end
