@@ -22,7 +22,7 @@ export DEP_FILE=".deps"
 # -use return value from ${PIPESTATUS[0]}, because ! hosed $?
 ! getopt --test > /dev/null 
 if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
-    echo 'I’m sorry, `getopt --test` failed in this environment.'
+    echo 'ERROR: `getopt --test` failed in this environment.'
     exit 1
 fi
 
