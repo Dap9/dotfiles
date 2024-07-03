@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 export INSTALLED_BASE=".installed/"
 export INFO=".info"
