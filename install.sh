@@ -105,13 +105,17 @@ fi
  
 # Does fish shell exist? if no then install it
 FISH_OK=$(dpkg-query -W -f='${Status}' "fish" 2>/dev/null | grep "install ok installed")
-if ! [ type fish &> /dev/null ] || [ ! "$FISH_OK" ];
+if [ ! type fish &> /dev/null ] || [ ! "$FISH_OK" ];
 then
   echo "Fish shell does not exist. Installing it... [Requires sudo]"
   sudo apt-add-repository ppa:fish-shell/release-3
   sudo apt update
   sudo apt install -y fish
   echo $(which fish) | sudo tee -a /etc/shells
+
+  # Setup vim proper keybindings for fish
+  echo "set -g fish_key_bindings fish_vi_key_bindings" >> "$HOME/.config/fish/config.fish"
+  echo "set fish_cursor_insert line" >> "$HOME/.config/fish/config.fish"
 
   if [[ $c == y ]]
   then

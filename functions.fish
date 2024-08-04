@@ -7,8 +7,9 @@ set dep_file $DEP_FILE
 set install_root $HOME/.config
 
 function _stow -d "Use stow to install the dotfiles" -a src dst
-  mkdir -p $install_root/$dst
-  stow -t $install_root/$dst $src
+  printf "Stowing $dst\n"
+  mkdir -p "$install_root"/"$dst"
+  stow -t "$install_root/$dst" "$src"
 end
 
 function install_if_dne -d "Install if does not exist" -a dir
@@ -64,7 +65,7 @@ function install -d "Install program" -a program dir
     return $status
   end
 
-  _stow $name $name
+  _stow "$program" "$program"
   touch "$installed_base$program"
   print_success "Finished installing $program"
   return 0
